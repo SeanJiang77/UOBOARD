@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+
+    <title>UO Board Game Club</title>
+</head>
+<body>
+<h1>UO Board Game Club</h1>
+
+<h2>Register a New Member</h2>
+<form id="registerForm">
+    <label for="memberId">Member ID:</label><br>
+    <input type="number" id="memberId" name="memberId" required><br>
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name" required><br>
+    <label for="contact">Contact:</label><br>
+    <input type="text" id="contact" name="contact" required><br><br>
+    <button type="submit">Register</button>
+</form>
+<p id="registerMessage"></p>
+
+<h2>Add a New Game Record</h2>
+<form id="gameForm">
+    <label for="gameId">Game ID:</label><br>
+    <input type="number" id="gameId" name="gameId" required><br>
+    <label for="date">Date:</label><br>
+    <input type="date" id="date" name="date" required><br>
+    <label for="gameType">Game Type:</label><br>
+    <select id="gameType" name="gameType" required>
+        <option value="Avalon">阿瓦隆</option>
+        <option value="Werewolf">狼人杀</option>
+        <option value="ThreeKingdomsKill">三国杀</option>
+    </select><br>
+    <label for="gameName">Game Name:</label><br>
+    <input type="text" id="gameName" name="gameName" required><br>
+    <label for="participants">Participants:</label><br>
+    <input type="text" id="participants" name="participants" required><br>
+    <label for="result">Result:</label><br>
+    <input type="text" id="result" name="result" required><br><br>
+    <button type="submit">Add Game</button>
+</form>
+<p id="gameMessage"></p>
+
+<script>
+    document.getElementById('registerForm').onsubmit = function (event) {
+        event.preventDefault();
+        const memberId = document.getElementById('memberId').value;
+        const name = document.getElementById('name').value;
+        const contact = document.getElementById('contact').value;
+
+        fetch('http://127.0.0.1:5000/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: memberId,
+                name: name,
+                contact: contact
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('registerMessage').innerText = data.message;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    };
+
+    document.getElementById('gameForm').onsubmit = function (event) {
+        event.preventDefault();
+        const gameId = document.getElementById('gameId').value;
+        const date = document.getElementById('date').value;
+        const gameName = document.getElementById('gameName').value;
+        const gameType = document.getElementById('gameType').value; // 新增的字段
+        const participants = document.getElementById('participants').value;
+        const result = document.getElementById('result').value;
+
+        fetch('http://127.0.0.1:5000/add_game', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                game_id: gameId,
+                date: date,
+                game_name: gameName,
+                game_type: gameType, // 发送到后端
+                participants: participants,
+                result: result
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('gameMessage').innerText = data.message;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    };
+</script>
+</body>
+</html>
