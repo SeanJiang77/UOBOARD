@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for
+from flask_cors import CORS
 import pandas as pd
 import os
 
 app = Flask(__name__)
-
+CORS(app)
+CORS(app, resources={r"/*": {"origins": "https://uoboard.onrender.com"}})
 # 定义数据文件的相对路径
 data_folder = "data"
 registration_file_path = os.path.join(data_folder, "registration_data.xlsx")
