@@ -1,4 +1,4 @@
-#!/Volumes/UOboardgame/MyProject/venv/bin/python3.12
+#!/Users/seanjiang/Documents/GitHub/UOBOARD/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
