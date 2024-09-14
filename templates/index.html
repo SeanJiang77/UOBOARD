@@ -47,7 +47,9 @@
 </div>
 
 <script>
-    const url = 'https://uoboard.onrender.com'
+    {#const baseURL = 'https://uoboard.onrender.com';#}
+    const baseURL = 'http://127.0.0.1:5000';
+
     document.getElementById('registerForm').addEventListener('submit', async function (event) {
         event.preventDefault();
         const formData = new FormData(event.target);
@@ -55,7 +57,7 @@
             name: formData.get('name'),
             contact: formData.get('contact')
         };
-        const response = await fetch('url/register', {
+        const response = await fetch(`${baseURL}/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -76,7 +78,7 @@
             participants: formData.get('participants'),
             result: formData.get('result')
         };
-        const response = await fetch('url/add_game', {
+        const response = await fetch(`${baseURL}/add_game`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
