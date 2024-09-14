@@ -3,90 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-
-    <title>UO Board Game Club</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <title>UO Board Game Club - Register & Add Game</title>
 </head>
 <body>
+<nav>
+    <div class="nav-wrapper teal">
+        <a href="#" class="brand-logo center">UO Board Game Club</a>
+    </div>
+</nav>
+
 <div class="container">
-    <h2>UO Board Game Club</h2>
+    <h4 class="center-align">Register a New Member</h4>
+    <div class="row">
+        <form id="registerForm" class="col s12">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="name" type="text" name="name" required>
+                    <label for="name">Name</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="contact" type="text" name="contact" required>
+                    <label for="contact">Contact</label>
+                </div>
+            </div>
+            <div class="row center-align">
+                <button type="submit" class="btn waves-effect waves-light teal">Register</button>
+            </div>
+        </form>
+    </div>
 
-    <h3>Register a New Member</h3>
-    <form id="registerForm">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
-
-        <label for="contact">Contact:</label>
-        <input type="text" id="contact" name="contact" required>
-
-        <button type="submit">Register</button>
-    </form>
-
-    <h3>Add a New Game Record</h3>
-    <form id="gameForm">
-        <label for="game_type">Game Type:</label>
-        <select id="game_type" name="game_type" required>
-            <option value="Avalon">Avalon</option>
-            <option value="Werewolf">Werewolf</option>
-        </select>
-
-        <label for="game_name">Game Name:</label>
-        <input type="text" id="game_name" name="game_name" required>
-
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="date" required>
-
-        <label for="participants">Participants (comma-separated):</label>
-        <input type="text" id="participants" name="participants" required>
-
-        <label for="result">Result:</label>
-        <input type="text" id="result" name="result" required>
-
-        <button type="submit">Add Game</button>
-    </form>
+    <h4 class="center-align">Add a New Game Record</h4>
+    <div class="row">
+        <form id="gameForm" class="col s12">
+            <div class="row">
+                <div class="input-field col s12">
+                    <select id="game_type" name="game_type" required>
+                        <option value="" disabled selected>Choose your option</option>
+                        <option value="Avalon">Avalon</option>
+                        <option value="Werewolf">Werewolf</option>
+                        <!-- Add more options if needed -->
+                    </select>
+                    <label for="game_type">Game Type</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="game_name" type="text" name="game_name" required>
+                    <label for="game_name">Game Name</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="date" type="text" class="datepicker" name="date" required>
+                    <label for="date">Date</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="participants" type="text" name="participants" required>
+                    <label for="participants">Participants (comma-separated)</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="result" type="text" name="result" required>
+                    <label for="result">Result</label>
+                </div>
+            </div>
+            <div class="row center-align">
+                <button type="submit" class="btn waves-effect waves-light teal">Add Game</button>
+            </div>
+        </form>
+    </div>
 </div>
 
-<script>
-    const baseURL = 'https://uoboard.onrender.com';
-    {#const baseURL = 'http://127.0.0.1:5000';#}
+<!-- JavaScript Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-    document.getElementById('registerForm').addEventListener('submit', async function (event) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        const data = {
-            name: formData.get('name'),
-            contact: formData.get('contact')
-        };
-        const response = await fetch(`${baseURL}/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-        const result = await response.json();
-        alert(result.message);
+<script>
+    // Initialize Materialize components
+    document.addEventListener('DOMContentLoaded', function() {
+        M.AutoInit();
     });
 
-    document.getElementById('gameForm').addEventListener('submit', async function (event) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        const data = {
-            game_type: formData.get('game_type'),
-            game_name: formData.get('game_name'),
-            date: formData.get('date'),
-            participants: formData.get('participants'),
-            result: formData.get('result')
+    const baseURL = 'https://uoboard.onrender.com'; // 使用你的实际部署URL
+    // const baseURL = 'http://127.0.0.1:5000'; // 本地开发使用
+
+    // Register Member Form Submission
+    $('#registerForm').on('submit', function (e) {
+        e.preventDefault();
+        const formData = {
+            name: $('#name').val(),
+            contact: $('#contact').val()
         };
-        const response = await fetch(`${baseURL}/add_game`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
+        $.ajax({
+            type: 'POST',
+            url: `${baseURL}/register`,
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (response) {
+                M.toast({html: response.message, classes: 'rounded'});
+                $('#registerForm')[0].reset();
             },
-            body: JSON.stringify(data)
+            error: function (xhr) {
+                M.toast({html: `Error: ${xhr.responseJSON.message}`, classes: 'rounded'});
+            }
         });
-        const result = await response.json();
-        alert(result.message);
+    });
+
+    // Add Game Form Submission
+    $('#gameForm').on('submit', function (e) {
+        e.preventDefault();
+        const formData = {
+            game_type: $('#game_type').val(),
+            game_name: $('#game_name').val(),
+            date: $('#date').val(),
+            participants: $('#participants').val().split(',').map(participant => participant.trim()),
+            result: $('#result').val()
+        };
+        $.ajax({
+            type: 'POST',
+            url: `${baseURL}/add_game`,
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (response) {
+                M.toast({html: response.message, classes: 'rounded'});
+                $('#gameForm')[0].reset();
+            },
+            error: function (xhr) {
+                M.toast({html: `Error: ${xhr.responseJSON.message}`, classes: 'rounded'});
+            }
+        });
     });
 </script>
 </body>
