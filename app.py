@@ -38,6 +38,11 @@ def read_and_append_to_excel(file_path, new_data):
     df.to_excel(file_path, index=False)
 
 
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register_member():
     if request.method == 'POST':
@@ -160,4 +165,4 @@ def admin_panel():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=10000, debug=True)
+    app.run(debug=True)
