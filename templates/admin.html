@@ -2,97 +2,83 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <h1>Admin Panel</h1>
 
     <h2>Members</h2>
     <table>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Contact</th>
-            <th>Actions</th>
-        </tr>
-        {% for member in members %}
-        <tr>
-            <td>{{ member['ID'] }}</td>
-            <td>{{ member['Name'] }}</td>
-            <td>{{ member['Contact'] }}</td>
-            <td>
-                <form method="POST" style="display:inline;">
-                    <input type="hidden" name="id" value="{{ member['ID'] }}">
-                    <input type="hidden" name="action" value="delete_member">
-                    <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Avalon Played</th>
+                <th>Avalon Wins</th>
+                <th>Werewolf Played</th>
+                <th>Werewolf Wins</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in members %}
+            <tr>
+                <td>{{ member.id }}</td>
+                <td>{{ member.name }}</td>
+                <td>{{ member.contact }}</td>
+                <td>{{ member.avalon_played }}</td>
+                <td>{{ member.avalon_wins }}</td>
+                <td>{{ member.werewolf_played }}</td>
+                <td>{{ member.werewolf_wins }}</td>
+                <td>
+                    <form action="{{ url_for('edit_member', member_id=member.id) }}" method="post" style="display:inline;">
+                        <button type="submit">Edit</button>
+                    </form>
+                    <form action="{{ url_for('delete_member', member_id=member.id) }}" method="post" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
-
-    <h2>Add New Member</h2>
-    <form method="POST">
-        <input type="hidden" name="action" value="add_member">
-        <label for="id">Member ID:</label><br>
-        <input type="number" id="id" name="id" required><br>
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name" required><br>
-        <label for="contact">Contact:</label><br>
-        <input type="text" id="contact" name="contact" required><br><br>
-        <button type="submit">Add Member</button>
-    </form>
 
     <h2>Games</h2>
     <table>
-        <tr>
-            <th>GameID</th>
-            <th>Date</th>
-            <th>GameType</th>
-            <th>GameName</th>
-            <th>Participants</th>
-            <th>Result</th>
-            <th>Actions</th>
-        </tr>
-        {% for game in games %}
-        <tr>
-            <td>{{ game['GameID'] }}</td>
-            <td>{{ game['Date'] }}</td>
-            <td>{{ game['GameType'] }}</td>
-            <td>{{ game['GameName'] }}</td>
-            <td>{{ game['Participants'] }}</td>
-            <td>{{ game['Result'] }}</td>
-            <td>
-                <form method="POST" style="display:inline;">
-                    <input type="hidden" name="game_id" value="{{ game['GameID'] }}">
-                    <input type="hidden" name="action" value="delete_game">
-                    <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>Game ID</th>
+                <th>Date</th>
+                <th>Game Type</th>
+                <th>Game Name</th>
+                <th>Participants</th>
+                <th>Result</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for game in games %}
+            <tr>
+                <td>{{ game.game_id }}</td>
+                <td>{{ game.date }}</td>
+                <td>{{ game.game_type }}</td>
+                <td>{{ game.game_name }}</td>
+                <td>{{ game.participants }}</td>
+                <td>{{ game.result }}</td>
+                <td>
+                    <form action="{{ url_for('edit_game', game_id=game.game_id) }}" method="post" style="display:inline;">
+                        <button type="submit">Edit</button>
+                    </form>
+                    <form action="{{ url_for('delete_game', game_id=game.game_id) }}" method="post" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
-
-    <h2>Add New Game</h2>
-    <form method="POST">
-        <input type="hidden" name="action" value="add_game">
-        <label for="game_id">Game ID:</label><br>
-        <input type="number" id="game_id" name="game_id" required><br>
-        <label for="date">Date:</label><br>
-        <input type="date" id="date" name="date" required><br>
-        <label for="game_type">Game Type:</label><br>
-        <input type="text" id="game_type" name="game_type" required><br>
-        <label for="game_name">Game Name:</label><br>
-        <input type="text" id="game_name" name="game_name" required><br>
-        <label for="participants">Participants:</label><br>
-        <input type="text" id="participants" name="participants" required><br>
-        <label for="result">Result:</label><br>
-        <input type="text" id="result" name="result" required><br><br>
-        <button type="submit">Add Game</button>
-    </form>
-
-    <br>
-    <a href="{{ url_for('home') }}">Back to Home</a>
 </body>
 </html>

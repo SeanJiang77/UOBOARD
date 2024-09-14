@@ -8,100 +8,83 @@
     <title>UO Board Game Club</title>
 </head>
 <body>
-<h1>UO Board Game Club</h1>
+<div class="container">
+    <h2>UO Board Game Club</h2>
 
-<h2>Register a New Member</h2>
-<form id="registerForm">
-    <label for="memberId">Member ID:</label><br>
-    <input type="number" id="memberId" name="memberId" required><br>
-    <label for="name">Name:</label><br>
-    <input type="text" id="name" name="name" required><br>
-    <label for="contact">Contact:</label><br>
-    <input type="text" id="contact" name="contact" required><br><br>
-    <button type="submit">Register</button>
-</form>
-<p id="registerMessage"></p>
+    <h3>Register a New Member</h3>
+    <form id="registerForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
 
-<h2>Add a New Game Record</h2>
-<form id="gameForm">
-    <label for="gameId">Game ID:</label><br>
-    <input type="number" id="gameId" name="gameId" required><br>
-    <label for="date">Date:</label><br>
-    <input type="date" id="date" name="date" required><br>
-    <label for="gameType">Game Type:</label><br>
-    <select id="gameType" name="gameType" required>
-        <option value="Avalon">阿瓦隆</option>
-        <option value="Werewolf">狼人杀</option>
-        <option value="ThreeKingdomsKill">三国杀</option>
-    </select><br>
-    <label for="gameName">Game Name:</label><br>
-    <input type="text" id="gameName" name="gameName" required><br>
-    <label for="participants">Participants:</label><br>
-    <input type="text" id="participants" name="participants" required><br>
-    <label for="result">Result:</label><br>
-    <input type="text" id="result" name="result" required><br><br>
-    <button type="submit">Add Game</button>
-</form>
-<p id="gameMessage"></p>
+        <label for="contact">Contact:</label>
+        <input type="text" id="contact" name="contact" required>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <h3>Add a New Game Record</h3>
+    <form id="gameForm">
+        <label for="game_type">Game Type:</label>
+        <select id="game_type" name="game_type" required>
+            <option value="Avalon">Avalon</option>
+            <option value="Werewolf">Werewolf</option>
+        </select>
+
+        <label for="game_name">Game Name:</label>
+        <input type="text" id="game_name" name="game_name" required>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="participants">Participants (comma-separated):</label>
+        <input type="text" id="participants" name="participants" required>
+
+        <label for="result">Result:</label>
+        <input type="text" id="result" name="result" required>
+
+        <button type="submit">Add Game</button>
+    </form>
+</div>
 
 <script>
-    document.getElementById('registerForm').onsubmit = function (event) {
+    document.getElementById('registerForm').addEventListener('submit', async function (event) {
         event.preventDefault();
-        const memberId = document.getElementById('memberId').value;
-        const name = document.getElementById('name').value;
-        const contact = document.getElementById('contact').value;
-
-        fetch('https://uoboard.onrender.com/register', {
+        const formData = new FormData(event.target);
+        const data = {
+            name: formData.get('name'),
+            contact: formData.get('contact')
+        };
+        const response = await fetch('/register', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                id: memberId,
-                name: name,
-                contact: contact
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('registerMessage').innerText = data.message;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    };
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        alert(result.message);
+    });
 
-    document.getElementById('gameForm').onsubmit = function (event) {
+    document.getElementById('gameForm').addEventListener('submit', async function (event) {
         event.preventDefault();
-        const gameId = document.getElementById('gameId').value;
-        const date = document.getElementById('date').value;
-        const gameName = document.getElementById('gameName').value;
-        const gameType = document.getElementById('gameType').value; // 新增的字段
-        const participants = document.getElementById('participants').value;
-        const result = document.getElementById('result').value;
-
-        fetch('https://uoboard.onrender.com/add_game', {
+        const formData = new FormData(event.target);
+        const data = {
+            game_type: formData.get('game_type'),
+            game_name: formData.get('game_name'),
+            date: formData.get('date'),
+            participants: formData.get('participants'),
+            result: formData.get('result')
+        };
+        const response = await fetch('/add_game', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                game_id: gameId,
-                date: date,
-                game_name: gameName,
-                game_type: gameType, // 发送到后端
-                participants: participants,
-                result: result
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('gameMessage').innerText = data.message;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    };
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        alert(result.message);
+    });
 </script>
 </body>
 </html>
