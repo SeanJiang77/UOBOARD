@@ -38,11 +38,6 @@ def read_and_append_to_excel(file_path, new_data):
     df.to_excel(file_path, index=False)
 
 
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-
 @app.route('/register', methods=['GET', 'POST'])
 def register_member():
     if request.method == 'POST':
@@ -56,7 +51,7 @@ def register_member():
         read_and_append_to_excel(registration_file_path, new_member)
 
         return jsonify({"message": "Registration successful!"})
-    return render_template('register.html')
+    return render_template('index.html')
 
 
 @app.route('/add_game', methods=['POST'])
@@ -165,4 +160,4 @@ def admin_panel():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=10000, debug=True)

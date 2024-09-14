@@ -51,7 +51,7 @@
         const name = document.getElementById('name').value;
         const contact = document.getElementById('contact').value;
 
-        fetch('http://127.0.0.1:5000/register', {
+        fetch('http://0.0.0.0:10000/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -80,7 +80,7 @@
         const participants = document.getElementById('participants').value;
         const result = document.getElementById('result').value;
 
-        fetch('http://127.0.0.1:5000/add_game', {
+        fetch('http://0.0.0.0:10000/add_game', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
