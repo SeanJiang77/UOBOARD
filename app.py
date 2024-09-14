@@ -91,7 +91,7 @@ def update_participants_statistics(participants, winner, game_type):
             db.session.commit()
 
 
-@app.route('/admin')
+@app.route('/admin31415926')
 def admin_panel():
     members = Member.query.all()
     games = Game.query.all()
