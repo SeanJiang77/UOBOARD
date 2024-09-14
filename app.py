@@ -5,7 +5,7 @@ import os
 
 app = Flask(__name__)
 CORS(app)
-CORS(app, resources={r"/*": {"origins": "https://uoboard.onrender.com"}})
+
 # 定义数据文件的相对路径
 data_folder = "data"
 registration_file_path = os.path.join(data_folder, "registration_data.xlsx")
@@ -54,7 +54,6 @@ def register_member():
         }
 
         read_and_append_to_excel(registration_file_path, new_member)
-
         return jsonify({"message": "Registration successful!"})
     return render_template('index.html')
 
