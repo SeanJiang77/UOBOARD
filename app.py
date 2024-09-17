@@ -1,38 +1,19 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import IntegrityError
 from flask_cors import CORS
-
+from flask_migrate import Migrate
+from extensions import db
+from config import Config
+from models import User, Game, Member
 app = Flask(__name__)
 CORS(app)
 
-# 配置数据库连接字符串，确保SSL连接
-app.config['SQLALCHEMY_DATABASE_URI'] = (
-    'postgresql://uoboard_user:aC6qYFrX9OXClAjka3R6Sq5gJThtD9ea@dpkg-crje8rv2p9s7s83j2pt0-a.oregon-postgres.render.com:5432/uoboard?sslmode=require')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# 应用配置
+app.config.from_object(Config)
 
-db = SQLAlchemy(app)
-
-
-# 定义Member模型
-class Member(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    contact = db.Column(db.String(100), nullable=False)
-    avalon_played = db.Column(db.Integer, default=0)
-    avalon_wins = db.Column(db.Integer, default=0)
-    werewolf_played = db.Column(db.Integer, default=0)
-    werewolf_wins = db.Column(db.Integer, default=0)
-
-
-# 定义Game模型
-class Game(db.Model):
-    game_id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date, nullable=False)
-    game_type = db.Column(db.String(100), nullable=False)
-    game_name = db.Column(db.String(100), nullable=False)
-    participants = db.Column(db.String(255), nullable=False)
-    result = db.Column(db.String(255), nullable=False)
+# 初始化扩展
+db.init_app(app)
+migrate = Migrate(app, db)
 
 
 # 在每次请求之前创建数据库表（如果尚未创建）
